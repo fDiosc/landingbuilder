@@ -18,9 +18,10 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, ExternalLink, Edit3, Users } from "lucide-react";
+import { MoreHorizontal, ExternalLink, Edit3, Users, Globe } from "lucide-react";
 import { NewLandingModal } from "@/components/dashboard/NewLandingModal";
 import { DeleteLandingAction } from "@/components/dashboard/DeleteLandingAction";
+import { DomainSettings } from "@/components/dashboard/DomainSettings";
 import Link from "next/link";
 import { getLandingUrl } from "@/lib/urls";
 
@@ -114,6 +115,7 @@ export default async function LandingsPage() {
                                                         <ExternalLink className="h-4 w-4" /> View Live
                                                     </a>
                                                 </DropdownMenuItem>
+                                                <DomainSettings landingId={landing.id} initialDomain={landing.customDomain} />
                                                 <DeleteLandingAction id={landing.id} name={landing.name} />
                                             </DropdownMenuContent>
                                         </DropdownMenu>
