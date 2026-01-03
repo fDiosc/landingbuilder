@@ -54,6 +54,13 @@ export const LeadForm = ({
         try {
             const result = await submitLead(landingId, email);
             if (result.success) {
+                // Track lead capture event in GA4
+                if (typeof window !== 'undefined' && (window as any).shipkitTrack) {
+                    (window as any).shipkitTrack('lead_capture', {
+                        email_domain: email.split('@')[1],
+                        form_location: 'lead_form_component'
+                    });
+                }
                 toast.success(successMessage || "Thank you! We'll be in touch.");
                 setEmail("");
             } else {

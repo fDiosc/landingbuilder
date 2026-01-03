@@ -16,7 +16,20 @@ export const Button = ({ text, color, variant, size, className }: { text: string
             ref={(ref: any) => connect(drag(ref))}
             className={`inline-block ${selected ? "ring-2 ring-blue-500 ring-offset-2 rounded-md" : ""}`}
         >
-            <ShadcnButton variant={variant} size={size} style={{ backgroundColor: color }} className={className}>
+            <ShadcnButton
+                variant={variant}
+                size={size}
+                style={{ backgroundColor: color }}
+                className={className}
+                onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).shipkitTrack) {
+                        (window as any).shipkitTrack('cta_click', {
+                            button_text: text,
+                            button_variant: variant || 'default'
+                        });
+                    }
+                }}
+            >
                 {text}
             </ShadcnButton>
         </div>

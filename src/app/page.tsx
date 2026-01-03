@@ -39,8 +39,8 @@ export default function Home() {
                 Ship your idea in <span className="text-blue-600">5 minutes.</span>
               </h1>
               <p className="mx-auto mt-8 max-w-2xl text-xl text-neutral-500 font-medium md:text-2xl leading-relaxed">
-                Landing pages with built-in emails, payments, and analytics.<br className="hidden md:block" />
-                No code required. No hassle. Just results.
+                Landing pages with built-in emails, payments, and <span className="text-blue-600 font-black">native analytics.</span><br className="hidden md:block" />
+                No code required. No tracking IDs to paste. Just results.
               </p>
               <div className="mt-12 flex flex-col items-center justify-center gap-6 sm:flex-row">
                 <Button asChild size="lg" className="h-14 px-10 text-xl bg-blue-600 hover:bg-blue-700 font-black shadow-lg shadow-blue-200 transition-all hover:scale-105 active:scale-95">
@@ -111,8 +111,8 @@ export default function Home() {
               />
               <FeatureCard
                 icon={<BarChart3 />}
-                title="Validation Results"
-                description="Real-time metrics show if your idea has legs. conversion rates and lead tracking built-in."
+                title="Native Analytics"
+                description="Zero-configuration tracking. Real-time metrics and visitor insights built-in from the moment you hit publish."
                 color="orange"
               />
               <FeatureCard

@@ -4,10 +4,17 @@ import { useState, useEffect } from "react";
 import { Wizard, WizardStep } from "@/components/dashboard/Wizard";
 import { getProfile } from "@/app/actions/profile";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, TrendingUp, Users, DollarSign } from "lucide-react";
+import { BarChart3, TrendingUp, Users, DollarSign, Search } from "lucide-react";
+import { AnalyticsDashboard } from "@/components/dashboard/AnalyticsDashboard";
+import { db } from "@/db"; // This will need to be a client-side fetch or we use a server component wrapper
+
+// Since we are in a client component, we'll fetch the landing ID via an effect or pass it as a prop.
+// For the MVP, we'll fetch the user's landings and show the first one's analytics.
 
 export default function AnalyticsPage() {
     const [showWizard, setShowWizard] = useState(false);
+    const [landingId, setLandingId] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getProfile().then(profile => {
@@ -16,6 +23,23 @@ export default function AnalyticsPage() {
                 setShowWizard(true);
             }
         });
+
+        // Fetch user's first landing to show analytics
+        const fetchLandings = async () => {
+            try {
+                const res = await fetch('/api/landings'); // We need this route or similar
+                const data = await res.json();
+                if (data.landings && data.landings.length > 0) {
+                    setLandingId(data.landings[0].id);
+                }
+            } catch (error) {
+                console.error("Failed to fetch landings:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLandings();
     }, []);
 
     const analyticsSteps: WizardStep[] = [
@@ -24,7 +48,7 @@ export default function AnalyticsPage() {
             description: "Welcome to your performance hub. Here you can track how your landing pages are converting visitors into leads.",
         },
         {
-            title: "The Funnel  funnel",
+            title: "The Funnel 📈",
             description: "Track 'Total Views' against 'Total Leads' to see your conversion rate. A healthy landing page usually converts between 2% and 10%.",
         },
         {
@@ -35,27 +59,32 @@ export default function AnalyticsPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight text-neutral-900">Analytics</h1>
-                <p className="text-neutral-500">Track your performance across all landings.</p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-neutral-900">Analytics</h1>
+                    <p className="text-neutral-500">Track your performance across all landings.</p>
+                </div>
+                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-neutral-100 shadow-sm text-sm text-neutral-500">
+                    <Search className="h-4 w-4" />
+                    <span>Real-time filtering enabled</span>
+                </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <StatsCard title="Total Views" value="0" icon={<Users className="h-4 w-4" />} description="+0% from last month" />
-                <StatsCard title="Total Leads" value="0" icon={<TrendingUp className="h-4 w-4" />} description="+0% from last month" />
-                <StatsCard title="Conversion Rate" value="0%" icon={<BarChart3 className="h-4 w-4" />} description="+0% from last month" />
-                <StatsCard title="Revenue" value="$0.00" icon={<DollarSign className="h-4 w-4" />} description="+0% from last month" />
-            </div>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Overview</CardTitle>
-                    <CardDescription>Your traffic and conversion data over time.</CardDescription>
-                </CardHeader>
-                <CardContent className="h-[300px] flex items-center justify-center border-t border-dashed border-neutral-200 m-6 rounded-lg bg-neutral-50">
-                    <p className="text-neutral-400 text-sm italic">No data available yet. Launch a page to start tracking.</p>
-                </CardContent>
-            </Card>
+            {landingId ? (
+                <AnalyticsDashboard landingId={landingId} />
+            ) : loading ? (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    {[1, 2, 3, 4].map(i => <div key={i} className="h-32 bg-neutral-100 animate-pulse rounded-3xl" />)}
+                </div>
+            ) : (
+                <div className="rounded-3xl border border-dashed border-neutral-200 bg-white p-12 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                        <BarChart3 className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold text-neutral-900">No data to track</h3>
+                    <p className="mt-2 text-neutral-500">Create and publish your first landing page to see analytics here.</p>
+                </div>
+            )}
 
             <Wizard
                 wizardKey="analyticsTour"
@@ -64,20 +93,5 @@ export default function AnalyticsPage() {
                 onClose={() => setShowWizard(false)}
             />
         </div>
-    );
-}
-
-function StatsCard({ title, value, icon, description }: { title: string; value: string; icon: React.ReactNode; description: string }) {
-    return (
-        <Card className="shadow-sm border-neutral-100">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-neutral-600">{title}</CardTitle>
-                <div className="text-blue-500 bg-blue-50 p-1.5 rounded-md">{icon}</div>
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold text-neutral-900">{value}</div>
-                <p className="text-xs text-neutral-500 mt-1">{description}</p>
-            </CardContent>
-        </Card>
     );
 }
