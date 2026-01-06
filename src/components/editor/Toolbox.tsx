@@ -13,7 +13,8 @@ import {
     Calendar,
     LayoutIcon,
     PanelsTopLeft,
-    Plus
+    Plus,
+    Video
 } from "lucide-react";
 import { Text } from "./selectors/Text";
 import { Button as ButtonSelector } from "./selectors/Button";
@@ -23,6 +24,7 @@ import { LeadForm } from "./selectors/LeadForm";
 import { PricingTable } from "./selectors/PricingTable";
 import { FeatureCards } from "./selectors/FeatureCards";
 import { CalCom } from "./selectors/CalCom";
+import { Storylane } from "./selectors/Storylane";
 import { FAQ } from "./selectors/FAQ";
 import { LogoCloud } from "./selectors/LogoCloud";
 import { Header } from "./selectors/Header";
@@ -115,6 +117,11 @@ export const Toolbox = () => {
                             label="Cal.com"
                             icon={<Calendar size={18} />}
                             move={(ref: HTMLElement) => connectors.create(ref, <CalCom />)}
+                        />
+                        <ToolboxItem
+                            label="Storylane"
+                            icon={<Video size={18} />}
+                            move={(ref: HTMLElement) => connectors.create(ref, <Storylane />)}
                         />
                     </div>
                 </div>

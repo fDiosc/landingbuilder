@@ -6,6 +6,7 @@ interface LandingContextType {
     landingId: string | null;
     integrations?: {
         calCom?: string | null;
+        storylaneId?: string | null;
     };
 }
 

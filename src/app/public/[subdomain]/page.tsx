@@ -26,7 +26,8 @@ export default async function PublicLandingPage({
 
     const projectIntegrations = (landing.integrations as any) || {};
     const integrations = {
-        calCom: projectIntegrations.calCom || profile?.calComUsername
+        calCom: projectIntegrations.calCom || profile?.calComUsername,
+        storylaneId: projectIntegrations.storylaneId || profile?.storylaneId
     };
 
     const designData = landing.designJson as any;

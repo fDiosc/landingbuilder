@@ -5,7 +5,7 @@ export default function Page() {
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 p-4">
             <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white/10 p-1 shadow-2xl backdrop-blur-xl">
                 <SignUp
-                    fallbackRedirectUrl="/onboarding"
+                    fallbackRedirectUrl="/dashboard"
                     appearance={{
                         elements: {
                             formButtonPrimary: "bg-blue-600 hover:bg-blue-700 transition-all",

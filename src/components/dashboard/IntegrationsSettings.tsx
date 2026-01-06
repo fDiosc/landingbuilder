@@ -13,12 +13,15 @@ import { Wizard, WizardStep } from "./Wizard";
 
 export function IntegrationsSettings({
     initialCalComUsername,
+    initialStorylaneId,
     onboardingStatus
 }: {
     initialCalComUsername?: string | null;
+    initialStorylaneId?: string | null;
     onboardingStatus?: { settingsTour?: boolean };
 }) {
     const [calComUsername, setCalComUsername] = useState(initialCalComUsername || "");
+    const [storylaneId, setStorylaneId] = useState(initialStorylaneId || "");
     const [loading, setLoading] = useState(false);
     const [showWizard, setShowWizard] = useState(!onboardingStatus?.settingsTour);
 
@@ -40,7 +43,7 @@ export function IntegrationsSettings({
     const handleSave = async () => {
         setLoading(true);
         try {
-            const res = await updateProfile({ calComUsername });
+            const res = await updateProfile({ calComUsername, storylaneId });
             if (res.success) {
                 toast.success("Global integrations updated successfully!");
             } else {
@@ -84,6 +87,25 @@ export function IntegrationsSettings({
                         </div>
                         <p className="text-xs text-neutral-500">
                             This link will be used as the default for all "Cal.com Scheduler" blocks in your landings.
+                        </p>
+                    </div>
+
+                    <div className="grid gap-2 pt-4 border-t border-neutral-100">
+                        <Label htmlFor="storylane">Storylane Default ID</Label>
+                        <div className="flex gap-2">
+                            <div className="flex items-center px-3 border border-r-0 border-neutral-200 rounded-l-md bg-neutral-50 text-neutral-500 text-sm">
+                                storylane.io/demo/
+                            </div>
+                            <Input
+                                id="storylane"
+                                placeholder="YOUR_STORYLANE_ID"
+                                value={storylaneId}
+                                onChange={(e) => setStorylaneId(e.target.value)}
+                                className="rounded-l-none"
+                            />
+                        </div>
+                        <p className="text-xs text-neutral-500">
+                            This ID will be used as the default for all "Storylane Demo" blocks in your landings.
                         </p>
                     </div>
                 </div>

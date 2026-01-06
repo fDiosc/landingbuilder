@@ -4,16 +4,24 @@ import { Plus, Globe, BarChart3, Zap } from "lucide-react";
 import Link from "next/link";
 import { NewLandingModal } from "@/components/dashboard/NewLandingModal";
 import { db } from "@/db";
-import { landings, leads } from "@/db/schema";
+import { landings, leads, profiles } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq, count, inArray } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { DashboardWizard } from "@/components/dashboard/DashboardWizard";
+import { normalizeDomain } from "@/lib/urls";
 
 export default async function DashboardPage() {
     const { userId } = await auth();
     if (!userId) redirect("/sign-in");
+
+    // Fetch profile to check onboarding
+    const profile = await db.query.profiles.findFirst({
+        where: eq(profiles.id, userId),
+    });
+
+    if (!profile) redirect("/onboarding");
 
     // Fetch stats
     const userLandings = await db.query.landings.findMany({

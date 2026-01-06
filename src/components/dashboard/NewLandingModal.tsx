@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createLanding } from "@/app/dashboard/landings/actions";
 import { generateLandingMagic } from "@/app/dashboard/landings/ai-actions";
+import { normalizeDomain } from "@/lib/urls";
 import {
     Dialog,
     DialogContent,
@@ -146,7 +147,7 @@ export function NewLandingModal({ children }: { children?: React.ReactNode }) {
                                         placeholder="my-saas"
                                         required
                                     />
-                                    <span className="text-sm text-neutral-500 font-medium">.localhost:3000</span>
+                                    <span className="text-sm text-neutral-500 font-medium">.{(typeof window !== 'undefined' && window.location.hostname !== 'localhost') ? normalizeDomain(process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'shipkit.app') : 'localhost:3000'}</span>
                                 </div>
                             </div>
 

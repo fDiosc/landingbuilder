@@ -47,6 +47,7 @@ export default async function SettingsPage() {
 
                 <IntegrationsSettings
                     initialCalComUsername={profile?.calComUsername}
+                    initialStorylaneId={profile?.storylaneId}
                     onboardingStatus={profile?.onboardingStatus as any}
                 />
 

@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-export async function updateProfile(data: { calComUsername?: string }) {
+export async function updateProfile(data: { calComUsername?: string, storylaneId?: string }) {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -14,6 +14,7 @@ export async function updateProfile(data: { calComUsername?: string }) {
         await db.update(profiles)
             .set({
                 calComUsername: data.calComUsername,
+                storylaneId: data.storylaneId,
                 updatedAt: new Date(),
             })
             .where(eq(profiles.id, userId));
